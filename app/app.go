@@ -1,10 +1,21 @@
 package app
 
+import (
+	"fmt"
+	"log"
+	"net/http"
 
-type Application struct{
-	handlers map[string]handler
+	"github.com/kirillkuprii/gotest/app/handler"
+)
+
+type Application struct {
+	RequestHandler handler.HttpHandler
 }
 
-type handler struct{
-	
+func (t *Application) Test() {
+	fmt.Println("test")
+}
+
+func (t *Application) Run(hostaddr string) {
+	log.Fatal(http.ListenAndServe(hostaddr, t.RequestHandler))
 }
