@@ -9,7 +9,6 @@ import (
 )
 
 type Application struct {
-	RequestHandler handler.HttpHandler
 }
 
 func (t *Application) Test() {
@@ -17,5 +16,10 @@ func (t *Application) Test() {
 }
 
 func (t *Application) Run(hostaddr string) {
-	log.Fatal(http.ListenAndServe(hostaddr, t.RequestHandler))
+
+	router := new(handler.Router)
+
+	router.HandleFunc("/getall/[0-9]", handler.GetAllCoupons)
+
+	log.Fatal(http.ListenAndServe(hostaddr, router))
 }
