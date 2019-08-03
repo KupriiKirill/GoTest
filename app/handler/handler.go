@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 	"regexp"
 )
@@ -9,40 +8,60 @@ import (
 type route struct {
 	pattern *regexp.Regexp
 	handler http.Handler
+	method  string
 }
 
+const (
+	GET    = "GET"
+	PUT    = "PUT"
+	DELETE = "DELETE"
+)
+
+//Router is a basic request handler with only HandleFunc function
 type Router struct {
 	routes []*route
 }
 
-func (t *Router) handler(pattern *regexp.Regexp, handler http.Handler) {
-	t.routes = append(t.routes, &route{pattern, handler})
+func (t *Router) handler(pattern *regexp.Regexp, handler http.Handler, method string) {
+	t.routes = append(t.routes, &route{pattern, handler, method})
 }
 
-func (t *Router) handleFunc(pattern *regexp.Regexp, handlerFunc func(http.ResponseWriter, *http.Request)) {
-	t.handler(pattern, http.HandlerFunc(handlerFunc))
+func (t *Router) handleFunc(pattern *regexp.Regexp, handlerFunc func(http.ResponseWriter, *http.Request), method string) {
+	t.handler(pattern, http.HandlerFunc(handlerFunc), method)
 }
 
-func (t *Router) HandleFunc(pattern string, handlerFunc func(http.ResponseWriter, *http.Request)) error {
-	if expr, err := regexp.Compile(pattern); err == nil{
-		t.handleFunc(expr, handlerFunc)
-	}else{
+//HandleFunc allows to set a specific route handler
+func (t *Router) HandleFunc(pattern string, handlerFunc func(http.ResponseWriter, *http.Request), method string) error {
+	if expr, err := regexp.Compile(pattern); err == nil {
+		t.handleFunc(expr, handlerFunc, method)
+	} else {
 		return err
 	}
 	return nil
 }
 
 func (t Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	handled := false
+	found := false
+
 	for _, route := range t.routes {
 		if route.pattern.MatchString(r.URL.Path) {
-			route.handler.ServeHTTP(w, r)
-			return
+			found = true
+			if r.Method == route.method {
+				handled = true
+				route.handler.ServeHTTP(w, r)
+				return
+			}
 		}
 	}
 
-	http.NotFound(w, r)
-}
+	if !found {
+		http.NotFound(w, r)
+		return
+	}
 
-func GetAllCoupons(writer http.ResponseWriter, requestPtr *http.Request) {
-	fmt.Fprintln(writer, "hello")
+	if !handled {
+		http.Error(w, "Method is not Allowed", http.StatusMethodNotAllowed)
+		return
+	}
 }

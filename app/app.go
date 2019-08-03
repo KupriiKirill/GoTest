@@ -1,25 +1,30 @@
 package app
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
 	"github.com/kirillkuprii/gotest/app/handler"
+	"github.com/kirillkuprii/gotest/app/method"
+	"github.com/kirillkuprii/gotest/app/storage"
 )
 
+//Application hadles service flow
 type Application struct {
 }
 
-func (t *Application) Test() {
-	fmt.Println("test")
-}
-
+//Run takes hoest address to serve on
 func (t *Application) Run(hostaddr string) {
 
 	router := new(handler.Router)
-
-	router.HandleFunc("/getall/[0-9]", handler.GetAllCoupons)
+	_, err := storage.OpenStorage("coupons")
+	if err != nil {
+		return
+	}
+	router.HandleFunc("/coupons/", method.GetAllCoupons, handler.GET)
+	router.HandleFunc("/coupons/filtered?.*", method.GetFileteredCoupons, handler.GET)
+	router.HandleFunc("/coupons/delete", method.DeleteCoupons, handler.DELETE)
+	router.HandleFunc("/coupons/put", method.PutCoupons, handler.PUT)
 
 	log.Fatal(http.ListenAndServe(hostaddr, router))
 }
