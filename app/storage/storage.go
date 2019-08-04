@@ -3,7 +3,6 @@ package storage
 import (
 	"fmt"
 	"sync"
-	"time"
 
 	"github.com/kirillkuprii/gotest/app/contract"
 )
@@ -54,37 +53,6 @@ func (t *inMemoryStorage) Unlock() {
 func (t *inMemoryStorage) Init() {
 	t.lastUID = 0
 	t.items = make(map[UID]*contract.Coupon)
-	coupons := []*contract.Coupon{
-		&contract.Coupon{
-			Name:        "coupon1",
-			Brand:       "brand1",
-			Value:       30,
-			TimeCreated: time.Now(),
-			TimeExpiry:  time.Now(),
-		},
-		&contract.Coupon{
-			Name:        "coupon2",
-			Brand:       "brand1",
-			Value:       10,
-			TimeCreated: time.Now(),
-			TimeExpiry:  time.Now(),
-		},
-		&contract.Coupon{
-			Name:        "coupon3",
-			Brand:       "brand1",
-			Value:       20,
-			TimeCreated: time.Now(),
-			TimeExpiry:  time.Now(),
-		},
-		&contract.Coupon{
-			Name:        "coupon4",
-			Brand:       "brand1",
-			Value:       50,
-			TimeCreated: time.Now(),
-			TimeExpiry:  time.Now(),
-		},
-	}
-	t.AddItems(coupons)
 	fmt.Println("storage initialized")
 }
 

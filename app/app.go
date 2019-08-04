@@ -24,6 +24,9 @@ func (t *Application) Run(hostaddr string) {
 		log.Fatal("Cannot open database")
 		return
 	}
+
+	t.addTestData()
+
 	router.HandleFunc("/coupons/$", t.handleDBRequest(method.GetAllCoupons), handler.GET)
 	router.HandleFunc("/coupons/$", t.handleDBRequest(method.GetCouponsCount), handler.HEAD)
 	router.HandleFunc("/coupons/filtered?.*", t.handleDBRequest(method.GetFileteredCoupons), handler.GET)
