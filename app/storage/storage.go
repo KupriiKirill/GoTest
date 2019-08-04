@@ -3,6 +3,7 @@ package storage
 import (
 	"fmt"
 	"sync"
+	"time"
 
 	"github.com/kirillkuprii/gotest/app/contract"
 )
@@ -12,6 +13,8 @@ type Storage interface {
 	Init()
 	AddItems([]*contract.Coupon)
 	GetAllItems() map[UID]*contract.Coupon
+	DeleteItems(ids []UID)
+	UpdateItems(items *map[UID]contract.Coupon)
 }
 
 // UID is unique id of the coupon in storage
@@ -50,11 +53,51 @@ func (t *inMemoryStorage) Unlock() {
 
 func (t *inMemoryStorage) Init() {
 	t.lastUID = 0
+	t.items = make(map[UID]*contract.Coupon)
+	coupons := []*contract.Coupon{
+		&contract.Coupon{
+			Name:        "coupon1",
+			Brand:       "brand1",
+			Value:       30,
+			TimeCreated: time.Now(),
+			TimeExpiry:  time.Now(),
+		},
+		&contract.Coupon{
+			Name:        "coupon2",
+			Brand:       "brand1",
+			Value:       10,
+			TimeCreated: time.Now(),
+			TimeExpiry:  time.Now(),
+		},
+		&contract.Coupon{
+			Name:        "coupon3",
+			Brand:       "brand1",
+			Value:       20,
+			TimeCreated: time.Now(),
+			TimeExpiry:  time.Now(),
+		},
+		&contract.Coupon{
+			Name:        "coupon4",
+			Brand:       "brand1",
+			Value:       50,
+			TimeCreated: time.Now(),
+			TimeExpiry:  time.Now(),
+		},
+	}
+	t.AddItems(coupons)
 	fmt.Println("storage initialized")
 }
 
 func (t *inMemoryStorage) AddItems(coupons []*contract.Coupon) {
 	go t.additemsInternal(coupons)
+}
+
+func (t *inMemoryStorage) DeleteItems(ids []UID) {
+	go t.deleteItemsInternal(ids)
+}
+
+func (t *inMemoryStorage) UpdateItems(items *map[UID]contract.Coupon) {
+	go t.updateItemsInternal(items)
 }
 
 func (t *inMemoryStorage) GetAllItems() map[UID]*contract.Coupon {
@@ -67,5 +110,21 @@ func (t *inMemoryStorage) additemsInternal(coupons []*contract.Coupon) {
 	for _, coupon := range coupons {
 		t.lastUID++
 		t.items[t.lastUID] = coupon
+	}
+}
+
+func (t *inMemoryStorage) deleteItemsInternal(ids []UID) {
+	t.Lock()
+	defer t.Unlock()
+	for _, uid := range ids {
+		delete(t.items, uid)
+	}
+}
+
+func (t *inMemoryStorage) updateItemsInternal(items *map[UID]contract.Coupon) {
+	t.Lock()
+	defer t.Unlock()
+	for uid, coupon := range *items {
+		t.items[uid] = &coupon
 	}
 }

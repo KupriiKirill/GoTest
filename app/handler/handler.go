@@ -12,9 +12,14 @@ type route struct {
 }
 
 const (
-	GET    = "GET"
-	PUT    = "PUT"
-	DELETE = "DELETE"
+	// GET is a const for httpmethod
+	GET     = "GET"
+	// PUT is a const for httpmethod
+	PUT     = "PUT"
+	// DELETE is a const for httpmethod
+	DELETE  = "DELETE"
+	// HEAD is a const for httpmethod
+	HEAD 	= "HEAD"
 )
 
 //Router is a basic request handler with only HandleFunc function
