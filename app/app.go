@@ -14,7 +14,7 @@ type Application struct {
 	db storage.Storage
 }
 
-//Run takes hoest address to serve on
+//Run takes host address to serve on
 func (t *Application) Run(hostaddr string) {
 
 	router := new(handler.Router)
