@@ -14,7 +14,8 @@ type Coupon struct {
 	TimeExpiry  time.Time `json:"expiry"`
 }
 
-var timeLayout = "2006-01-02 15:04:05"
+//TimeLayout of the contract's dates
+var TimeLayout = "2006-01-02 15:04:05"
 
 // UnmarshalJSON overrides json unmarshal logic
 func (t *Coupon) UnmarshalJSON(data []byte) error {
@@ -31,11 +32,11 @@ func (t *Coupon) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
-	if t.TimeCreated, err = time.Parse(timeLayout, aux.TimeCreated); err != nil {
+	if t.TimeCreated, err = time.Parse(TimeLayout, aux.TimeCreated); err != nil {
 		return err
 	}
 
-	if t.TimeExpiry, err = time.Parse(timeLayout, aux.TimeExpiry); err != nil {
+	if t.TimeExpiry, err = time.Parse(TimeLayout, aux.TimeExpiry); err != nil {
 		return err
 	}
 	return nil
@@ -50,8 +51,8 @@ func (t *Coupon) MarshalJSON() ([]byte, error) {
 		TimeExpiry  string `json:"expiry"`
 	}{
 		Alias : (*Alias)(t),
-		TimeCreated: t.TimeCreated.Format(timeLayout),
-		TimeExpiry:  t.TimeExpiry.Format(timeLayout),		
+		TimeCreated: t.TimeCreated.Format(TimeLayout),
+		TimeExpiry:  t.TimeExpiry.Format(TimeLayout),		
 	})
 }
 

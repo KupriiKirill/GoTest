@@ -29,7 +29,7 @@ func (t *Application) Run(hostaddr string) {
 
 	router.HandleFunc("/coupons/$", t.handleDBRequest(method.GetAllCoupons), handler.GET)
 	router.HandleFunc("/coupons/$", t.handleDBRequest(method.GetCouponsCount), handler.HEAD)
-	router.HandleFunc("/coupons/filtered?.*", t.handleDBRequest(method.GetFileteredCoupons), handler.GET)
+	router.HandleFunc("/coupons/filtered?.*", t.handleDBRequest(method.GetFilteredCoupons), handler.GET)
 	router.HandleFunc("/coupons/delete/$", t.handleDBRequest(method.DeleteCoupons), handler.DELETE)
 	router.HandleFunc("/coupons/put/$", t.handleDBRequest(method.PutCoupons), handler.PUT)
 

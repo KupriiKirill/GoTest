@@ -7,6 +7,8 @@ import (
 )
 
 func (t *Application) addTestData() {
+	time1, _ := time.Parse(contract.TimeLayout, "2012-12-21 10:03:23")
+	time2, _ := time.Parse(contract.TimeLayout, "2012-11-21 10:03:23")
 	coupons := []*contract.Coupon{
 		&contract.Coupon{
 			Name:        "coupon1",
@@ -24,16 +26,16 @@ func (t *Application) addTestData() {
 		},
 		&contract.Coupon{
 			Name:        "coupon3",
-			Brand:       "brand1",
+			Brand:       "brand3",
 			Value:       20,
-			TimeCreated: time.Now(),
+			TimeCreated: time1,
 			TimeExpiry:  time.Now(),
 		},
 		&contract.Coupon{
 			Name:        "coupon4",
-			Brand:       "brand1",
+			Brand:       "brand4",
 			Value:       50,
-			TimeCreated: time.Now(),
+			TimeCreated: time2,
 			TimeExpiry:  time.Now(),
 		},
 	}
