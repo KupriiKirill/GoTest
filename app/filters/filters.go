@@ -60,28 +60,30 @@ const (
 	equal = "eq"
 )
 
-type nameFilter struct {
-	name string
-}
+type (
+	nameFilter struct {
+		name string
+	}
 
-type brandFilter struct {
-	brand string
-}
+	brandFilter struct {
+		brand string
+	}
 
-type valueFilter struct {
-	more  string
-	value int
-}
+	valueFilter struct {
+		more  string
+		value int
+	}
 
-type createdTimeFilter struct {
-	more  string
-	value time.Time
-}
+	createdTimeFilter struct {
+		more  string
+		value time.Time
+	}
 
-type expliryTimeFilter struct {
-	more  string
-	value time.Time
-}
+	expliryTimeFilter struct {
+		more  string
+		value time.Time
+	}
+)
 
 func (t *nameFilter) IsPassing(coupon *contract.Coupon) bool {
 	return strings.Contains(coupon.Name, t.name)

@@ -50,13 +50,12 @@ func (t *Coupon) MarshalJSON() ([]byte, error) {
 		TimeCreated string `json:"createdAt"`
 		TimeExpiry  string `json:"expiry"`
 	}{
-		Alias : (*Alias)(t),
+		Alias:       (*Alias)(t),
 		TimeCreated: t.TimeCreated.Format(TimeLayout),
-		TimeExpiry:  t.TimeExpiry.Format(TimeLayout),		
+		TimeExpiry:  t.TimeExpiry.Format(TimeLayout),
 	})
 }
 
 func formatTime(time time.Time) string {
-	layout := "2006-01-02 15:04:05"
-	return time.Format(layout)
+	return time.Format(TimeLayout)
 }
