@@ -1,14 +1,16 @@
 # GoTest
 
-basic http server for coupons
-has methods
-/coupons/ GET
-/coupons/ HEAD
-/coupons/filtered?[filter1]?[filter2] GET
-/coupons/delete/ DELETE
-/coupons/put/ handler.PUT
+Basic http server for coupons by default works on localhost:500
+
+## Methods
+* /coupons/ GET
+* /coupons/ HEAD
+* /coupons/filtered?[filter1]?[filter2] GET
+* /coupons/delete/ DELETE
+* /coupons/put/ handler.PUT
 
 ## PUT 
+```
 Put method should have body if the type:
 {  
    "update":{  //items we want to update
@@ -30,7 +32,7 @@ Put method should have body if the type:
       }
    ]
 }
-
+```
 ##Filter
 Filter has signature: "name" eq/mt/lt "value"
 * filter names are : 
@@ -39,5 +41,5 @@ Filter has signature: "name" eq/mt/lt "value"
 * * "value" 
 * * "createdAt" 
 * * "expiry"
-* spaces should be converted to %20
+* spaces should be converted into %20
 * time format : "2006-01-02 15:04:05"
